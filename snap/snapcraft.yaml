@@ -1,0 +1,31 @@
+name: photon
+base: core18
+version: 'git'
+summary: Incredibly fast crawler designed for OSINT.
+description: |
+  Incredibly fast crawler designed for OSINT.
+
+grade: stable
+confinement: strict
+
+parts:
+  photon:
+    plugin: python
+    source: .
+    requirements:
+      - requirements.txt
+    override-build: |
+      snapcraftctl build
+
+      mkdir -p $SNAPCRAFT_PART_INSTALL/photon
+      cp *.py $SNAPCRAFT_PART_INSTALL/photon/
+      cp -a core $SNAPCRAFT_PART_INSTALL/photon/
+      cp -a plugins $SNAPCRAFT_PART_INSTALL/photon/
+
+apps:
+  photon:
+    command: python3 $SNAP/photon/photon.py
+    plugs:
+      - home
+      - removable-media
+      - network
